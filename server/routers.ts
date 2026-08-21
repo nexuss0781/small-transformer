@@ -1,28 +1,29 @@
-import { COOKIE_NAME } from "@shared/const";
-import { getSessionCookieOptions } from "./_core/cookies";
-import { systemRouter } from "./_core/systemRouter";
+import { z } from "zod";
+import { generateModelResponse, getModelStatus } from "./inference";
 import { publicProcedure, router } from "./_core/trpc";
 
-export const appRouter = router({
-    // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
-  system: systemRouter,
-  auth: router({
-    me: publicProcedure.query(opts => opts.ctx.user),
-    logout: publicProcedure.mutation(({ ctx }) => {
-      const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
-      return {
-        success: true,
-      } as const;
-    }),
-  }),
+const chatMessageSchema = z.object({
+  role: z.enum(["system", "user", "assistant"]),
+  content: z.string().trim().min(1).max(8_000),
+});
 
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+export const appRouter = router({
+  // Compatibility-only procedure group. It always reports an anonymous session and never performs OAuth.
+  auth: router({
+    me: publicProcedure.query(() => null),
+    logout: publicProcedure.mutation(() => ({ success: true })),
+  }),
+  model: router({
+    status: publicProcedure.query(() => getModelStatus()),
+    chat: publicProcedure
+      .input(
+        z.object({
+          messages: z.array(chatMessageSchema).min(1).max(16),
+          maxNewTokens: z.number().int().min(8).max(512).optional(),
+        })
+      )
+      .mutation(({ input }) => generateModelResponse(input.messages, input.maxNewTokens)),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
