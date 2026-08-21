@@ -19,3 +19,10 @@
 - [x] Create and push the completed source to the public GitHub repository `nexuss0781/small-transformer`.
 - [x] Install the CPU-only local Python runtime and download the SmolLM2 135M Instruct snapshot for the development preview.
 - [x] Run a real local inference through the application and verify the preview reports the model as ready.
+- [x] Confirm the target Q5_K_M GGUF quantization level and quality-memory trade-off before conversion.
+- [x] Convert SmolLM2 135M Instruct to GGUF, compare response quality and RAM use, and rewrite the backend around llama.cpp (Q6_K selected after testing).
+- [x] Review the measured Q5_K_M and Q6_K quality-memory comparison before selecting the final llama.cpp runtime model.
+- [x] Present the recorded F16, Q5_K_M, and Q6_K prompt-and-response transcripts.
+- [x] Replace the PyTorch child-process runtime with Q6_K GGUF inference through llama.cpp.
+- [x] Update Docker to build llama.cpp and bake in the SmolLM2 Q6_K GGUF model without a Python runtime.
+- [x] Verify Q6_K end-to-end application inference and lower RAM reporting, then push the implementation to GitHub.

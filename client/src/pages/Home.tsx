@@ -106,8 +106,8 @@ export default function Home() {
             </div>
             <div className="terminal-chip-row">
               <Badge variant="outline">CPU only</Badge>
-              <Badge variant="outline">Transformers</Badge>
-              <Badge variant="outline">Local weights</Badge>
+              <Badge variant="outline">llama.cpp</Badge>
+              <Badge variant="outline">Q6_K GGUF</Badge>
             </div>
           </section>
 
@@ -117,7 +117,7 @@ export default function Home() {
               <span className={isReady ? "text-emerald-300" : isUnavailable ? "text-red-300" : "text-amber-300"}>{statusLabel}</span>
             </div>
             <p>{status?.detail || "Contacting local inference process…"}</p>
-            <div className="terminal-path"><Database className="size-3" /> {status?.modelDirectory || "models/SmolLM2-135M-Instruct"}</div>
+            <div className="terminal-path"><Database className="size-3" /> {status?.modelDirectory || "models/SmolLM2-135M-Instruct-Q6_K.gguf"}</div>
           </section>
 
           <section>

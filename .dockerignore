@@ -3,6 +3,7 @@ dist
 .git
 .manus-logs
 models
+*.gguf
 .env
 .env.*
 *.log

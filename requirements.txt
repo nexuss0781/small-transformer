@@ -1,4 +1,0 @@
-# CPU-only inference dependencies. PyTorch itself is installed from the official CPU wheel index in Docker.
-transformers==4.48.3
-safetensors==0.5.2
-huggingface-hub==0.27.1
