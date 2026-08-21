@@ -5,7 +5,11 @@ import path from "path";
 
 export const MODEL_ID = "HuggingFaceTB/SmolLM2-135M-Instruct";
 const PROJECT_ROOT = process.cwd();
-const MODEL_DIRECTORY = process.env.MODEL_DIR || path.join(PROJECT_ROOT, "models", "SmolLM2-135M-Instruct");
+const PROJECT_MODEL_DIRECTORY = path.join(PROJECT_ROOT, "models", "SmolLM2-135M-Instruct");
+const LOCAL_DEVELOPMENT_MODEL_DIRECTORY = "/home/ubuntu/smollm2-models/SmolLM2-135M-Instruct";
+const MODEL_DIRECTORY =
+  process.env.MODEL_DIR ||
+  (existsSync(PROJECT_MODEL_DIRECTORY) ? PROJECT_MODEL_DIRECTORY : LOCAL_DEVELOPMENT_MODEL_DIRECTORY);
 const PYTHON_BIN = process.env.PYTHON_BIN || "python3";
 const MAX_PROCESS_OUTPUT_BYTES = 1_500_000;
 
@@ -86,7 +90,7 @@ function collectOutput(child: ReturnType<typeof spawn>, timeoutMs: number, stdin
 export async function runPythonScript(name: string, request?: unknown, timeoutMs = 120_000) {
   const child = spawn(PYTHON_BIN, [scriptPath(name)], {
     cwd: PROJECT_ROOT,
-    env: { ...process.env, PYTHONUNBUFFERED: "1" },
+    env: { ...process.env, MODEL_DIR: MODEL_DIRECTORY, PYTHONUNBUFFERED: "1" },
     stdio: ["pipe", "pipe", "pipe"],
   });
   const { stdout } = await collectOutput(child, timeoutMs, request ? JSON.stringify(request) : undefined);
