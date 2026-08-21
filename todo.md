@@ -16,4 +16,4 @@
 - [x] Remove user-facing authentication and runtime configuration requirements from the completed application.
 - [x] Ensure the Docker image installs CPU dependencies, downloads model weights during build, and runs all model loading and inference internally.
 - [x] Add Vitest coverage for successful Python output parsing and child-process error propagation.
-- [ ] Create and push the completed source to the public GitHub repository `nexuss0781/small-transformer`.
+- [x] Create and push the completed source to the public GitHub repository `nexuss0781/small-transformer`.
